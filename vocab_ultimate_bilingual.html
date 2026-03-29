@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f6f8ff;--bg2:#fff;--bg3:#eef0fa;--bd:#dde0f5;--tx:#131320;--tx2:#5a5a90;--acc:#3b5bdb;--acc2:#748ffc;--suc:#2f9e44;--suc-bg:#d3f9d8;--dan:#c92a2a;--dan-bg:#ffe0e0;--war:#e67700;--war-bg:#fff3bf;--red:#e03131}
+@media(prefers-color-scheme:dark){:root{--bg:#0d0e1a;--bg2:#141525;--bg3:#1c1e30;--bd:#2a2d48;--tx:#e8eaff;--tx2:#8890c0;--acc:#748ffc;--acc2:#91a7ff;--suc:#51cf66;--suc-bg:#0a3018;--dan:#ff6b6b;--dan-bg:#3a0a0a;--war:#ffa94d;--war-bg:#3a2000;--red:#ff6b6b}}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
+.app{max-width:680px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--bd);background:var(--bg2);position:sticky;top:0;z-index:20}
+.logo-btn{font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--bg3);transition:all .2s;user-select:none}
+.logo-btn:hover{border-color:var(--acc);color:var(--acc2)}
+.lang-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);display:inline-block}
+.tabs{display:flex;gap:2px;background:var(--bg3);padding:2px;border-radius:8px;border:1px solid var(--bd)}
+.tab{padding:5px 9px;border-radius:6px;cursor:pointer;font-size:11px;color:var(--tx2);transition:all .15s;white-space:nowrap}
+.tab.active{background:var(--acc);color:#fff}
+.sec{display:none;padding:12px 14px}.sec.active{display:block}
+input,select,textarea{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:7px 10px;font-size:13px;outline:none;width:100%;transition:border .15s;resize:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+button{cursor:pointer;border:none;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:500;transition:all .15s}
+.bp{background:var(--acc);color:#fff}.bp:hover{opacity:.88}
+.bg-btn{background:transparent;color:var(--tx2);border:1px solid var(--bd)}.bg-btn:hover{background:var(--bg3)}
+.bd-btn{background:transparent;color:var(--dan);border:1px solid var(--dan)}.bd-btn:hover{background:var(--dan-bg)}
+.bs{background:var(--suc-bg);color:var(--suc);border:1px solid var(--suc)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sc{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:11px;text-align:center}
+.sn{font-size:20px;font-weight:500;color:var(--acc2)}.sl{font-size:11px;color:var(--tx2);margin-top:2px}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:13px;margin-bottom:9px}
+.row{margin-bottom:9px}.lbl{display:block;font-size:11px;color:var(--tx2);margin-bottom:3px}
+.tag{display:inline-block;padding:2px 6px;border-radius:9px;font-size:10px;font-weight:500}
+/* JP tags */
+.t-n1{background:#312060;color:#c4b5fd}.t-n2{background:#1a3050;color:#7dd3fc}.t-n3{background:#1a3520;color:#86efac}
+.t-n4{background:#2a2010;color:#fcd34d}.t-n5{background:#301030;color:#f9a8d4}
+.t-verb{background:#301020;color:#f9a8d4}.t-noun{background:#302010;color:#fcd34d}
+.t-adj{background:#1e2030;color:#a5b4fc}.t-adv{background:#1e2a1e;color:#86efac}
+/* EN tags */
+.t-a1{background:#0a3018;color:#51cf66}.t-a2{background:#0a1e38;color:#74c0fc}
+.t-b1{background:#3a2000;color:#ffa94d}.t-b2{background:#3a1800;color:#ffb07c}
+.t-c1{background:#3a0020;color:#f783ac}.t-c2{background:#1e0050;color:#b197fc}
+.t-phrase{background:#1a2540;color:#93c5fd}
+.t-hard{background:#3a0a0a;color:#f87171}.t-due{background:#0a1e38;color:#74c0fc}.t-other{background:#252525;color:#9ca3af}
+@media(prefers-color-scheme:light){
+.t-n1{background:#ede9fe;color:#5b21b6}.t-n2{background:#e0f2fe;color:#075985}.t-n3{background:#dcfce7;color:#166534}
+.t-n4{background:#fef9c3;color:#713f12}.t-n5{background:#fce7f3;color:#9d174d}
+.t-verb{background:#fce7f3;color:#9d174d}.t-noun{background:#fffbeb;color:#78350f}
+.t-adj{background:#eef2ff;color:#3730a3}.t-adv{background:#f0fdf4;color:#14532d}
+.t-a1{background:#dcfce7;color:#166534}.t-a2{background:#dbeafe;color:#1d4ed8}
+.t-b1{background:#fef9c3;color:#a16207}.t-b2{background:#ffedd5;color:#c2410c}
+.t-c1{background:#fce7f3;color:#9d174d}.t-c2{background:#ede9fe;color:#6d28d9}
+.t-phrase{background:#dbeafe;color:#1d4ed8}
+.t-hard{background:#fee2e2;color:#b91c1c}.t-due{background:#dbeafe;color:#1d4ed8}.t-other{background:#f5f5f4;color:#44403c}}
+.wcard{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:11px 13px;margin-bottom:7px;display:flex;align-items:flex-start;gap:9px;transition:border .15s}
+.wcard:hover{border-color:var(--acc)}.wcard.mastered{opacity:.45}
+.wmain{flex:1;min-width:0}
+.whead{font-size:19px;font-weight:500}
+.wsub{font-size:11px;color:var(--tx2);font-family:monospace}
+.wdef{font-size:12px;color:var(--tx2);margin-top:2px}
+.wex{font-size:11px;color:var(--tx2);font-style:italic;margin-top:2px}
+.wroot{font-size:10px;color:var(--acc);margin-top:2px}
+.wtags{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.wact{display:flex;gap:4px;flex-shrink:0;margin-top:2px}
+.ico{background:transparent;border:1px solid var(--bd);border-radius:6px;padding:3px 6px;color:var(--tx2);font-size:12px;cursor:pointer}.ico:hover{background:var(--bg3)}
+.fbar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:9px}
+.chip{padding:3px 8px;border-radius:14px;background:var(--bg3);border:1px solid var(--bd);color:var(--tx2);cursor:pointer;font-size:11px;transition:all .15s}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.pbar{background:var(--bg3);border-radius:99px;height:5px;margin-bottom:9px;overflow:hidden}
+.pfill{background:var(--acc);height:100%;border-radius:99px;transition:width .3s}
+.qcard{background:var(--bg2);border:2px solid var(--bd);border-radius:13px;padding:22px 16px;text-align:center;cursor:pointer;transition:border .2s;min-height:145px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:11px}
+.qcard:hover{border-color:var(--acc)}
+.qbig{font-size:26px;font-weight:500;margin-bottom:5px}.qsub{font-size:12px;color:var(--tx2)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:11px}
+.opt{background:var(--bg2);border:1px solid var(--bd);color:var(--tx);border-radius:9px;padding:9px;font-size:13px;cursor:pointer;transition:all .15s;text-align:center}
+.opt:hover:not(:disabled){border-color:var(--acc);color:var(--acc2)}
+.opt.ok{background:var(--suc-bg);border-color:var(--suc);color:var(--suc)}
+.opt.no{background:var(--dan-bg);border-color:var(--dan);color:var(--dan)}
+.flip-wrap{transition:transform .45s;transform-style:preserve-3d;position:relative;min-height:90px;width:100%}
+.flip-wrap.flipped{transform:rotateY(180deg)}
+.fface{backface-visibility:hidden;-webkit-backface-visibility:hidden;width:100%}
+.fback{transform:rotateY(180deg);position:absolute;top:0;left:0;width:100%}
+.notif{position:fixed;top:10px;right:10px;background:var(--acc);color:#fff;padding:6px 13px;border-radius:8px;font-size:12px;z-index:999;opacity:0;pointer-events:none;transition:opacity .25s}
+.notif.show{opacity:1}
+.empty{text-align:center;color:var(--tx2);padding:32px 0;font-size:13px}
+.thbtn{padding:5px 9px;border-radius:6px;font-size:12px;background:var(--bg3);border:1px solid var(--bd);color:var(--tx2);cursor:pointer}
+.thbtn.on{border-color:var(--acc);color:var(--acc2);background:var(--bg2)}
+.goal-ring{width:64px;height:64px;position:relative;flex-shrink:0}
+.goal-ring svg{transform:rotate(-90deg)}
+.grl{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500}
+.sday{width:17px;height:17px;border-radius:4px;background:var(--bg3);border:1px solid var(--bd);font-size:9px;display:flex;align-items:center;justify-content:center;color:var(--tx2)}
+.sday.done{background:var(--acc);border-color:var(--acc);color:#fff}
+/* Voice btn */
+.vbtn{background:var(--bg3);border:1.5px solid var(--bd);border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
+.vbtn.listening{background:var(--dan-bg);border-color:var(--dan);animation:pulse .8s infinite alternate}
+@keyframes pulse{from{opacity:1}to{opacity:.6}}
+.vbtn.done{background:var(--suc-bg);border-color:var(--suc)}
+/* Multi-def editor */
+.def-item{background:var(--bg3);border:1px solid var(--bd);border-radius:8px;padding:8px;margin-bottom:6px;position:relative}
+.def-num{font-size:10px;color:var(--acc2);font-weight:500;margin-bottom:4px}
+.def-del{position:absolute;top:6px;right:6px;background:transparent;border:none;color:var(--tx2);cursor:pointer;font-size:13px;padding:1px 5px}
+.def-del:hover{color:var(--dan)}
+.add-def-btn{width:100%;padding:7px;background:transparent;border:1px dashed var(--bd);border-radius:8px;color:var(--tx2);cursor:pointer;font-size:12px;margin-bottom:9px}
+.add-def-btn:hover{border-color:var(--acc);color:var(--acc2)}
+/* Spell */
+.spell-inp{font-size:18px;text-align:center;letter-spacing:2px}
+.spell-inp.ok{border-color:var(--suc);background:var(--suc-bg)}
+.spell-inp.no{border-color:var(--dan);background:var(--dan-bg)}
+/* Lang switch animation */
+.sec-fade{animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+/* OCR zone */
+.ocr-zone{border:2px dashed var(--bd);border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:all .15s}
+.ocr-zone:hover,.ocr-zone.dragover{border-color:var(--acc);background:var(--bg3)}
+/* Daily words */
+.dword{background:var(--bg2);border:1px solid var(--bd);border-radius:9px;padding:8px 11px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.dword-main{flex:1;min-width:0}
+/* Verb forms */
+.forms-section{background:var(--bg3);border:1px solid var(--bd);border-radius:9px;padding:9px;margin-bottom:9px}
+.forms-title{font-size:11px;font-weight:500;color:var(--acc2);margin-bottom:7px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none}
+.forms-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.form-item label{display:block;font-size:10px;color:var(--tx2);margin-bottom:2px}
+.form-item input{font-size:12px;padding:5px 8px}
+.conj-q{background:var(--bg2);border:2px solid var(--bd);border-radius:13px;padding:18px 16px;text-align:center;margin-bottom:11px}
+.conj-form-badge{display:inline-block;background:var(--acc);color:#fff;border-radius:8px;padding:3px 10px;font-size:12px;margin-bottom:8px}
+.wforms{margin-top:5px;padding-top:5px;border-top:1px dashed var(--bd);display:flex;flex-wrap:wrap;gap:4px}
+.wform-chip{background:var(--bg3);border:1px solid var(--bd);border-radius:6px;padding:2px 6px;font-size:10px;cursor:default}
+.wform-chip span{color:var(--acc2);margin-right:2px}
+</style>
+</head><body>
+<div class="app">
+<div class="notif" id="notif"></div>
+
+<div class="topbar">
+  <div class="logo-btn" id="logoBtn" onclick="switchLang()">
+    <span class="lang-dot" id="langDot"></span>
+    <span id="logoText">English Vocab</span>
+    <span style="font-size:10px;color:var(--tx2)">⇄</span>
+  </div>
+  <div class="tabs" id="tabBar">
+    <div class="tab active" onclick="sw('home')">Home</div>
+    <div class="tab" onclick="sw('words')">Words</div>
+    <div class="tab" onclick="sw('add')">Add</div>
+    <div class="tab" onclick="sw('quiz')">Quiz</div>
+    <div class="tab" onclick="sw('map')">Map</div>
+    <div class="tab" onclick="sw('more')">More</div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="sec active" id="tab-home">
+  <div class="g4" style="margin-bottom:10px">
+    <div class="sc"><div class="sn" id="ht">0</div><div class="sl" id="sl-total">Total</div></div>
+    <div class="sc"><div class="sn" id="hm">0</div><div class="sl" id="sl-mastered">Mastered</div></div>
+    <div class="sc"><div class="sn" id="hh">0</div><div class="sl" id="sl-hard">Hard</div></div>
+    <div class="sc"><div class="sn" id="hd">0</div><div class="sl" id="sl-due">Due</div></div>
+  </div>
+  <div class="card" style="margin-bottom:9px">
+    <div style="display:flex;align-items:center;gap:11px">
+      <div class="goal-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="24" fill="none" stroke="var(--bg3)" stroke-width="6"/><circle cx="32" cy="32" r="24" fill="none" stroke="var(--acc)" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8" id="gCircle" stroke-dashoffset="150.8"/></svg>
+        <div class="grl" id="gPct">0%</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:500;margin-bottom:3px" id="lbl-dailygoal">Daily Goal</div>
+        <div style="font-size:12px;color:var(--tx2);margin-bottom:4px" id="gStatus"></div>
+        <div style="display:flex;align-items:center;gap:5px">
+          <input type="number" id="goalN" min="1" max="50" value="5" style="width:46px;padding:3px 6px;font-size:12px" oninput="saveGoal()">
+          <span style="font-size:11px;color:var(--tx2)" id="lbl-perday">words/day</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:9px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-size:13px;font-weight:500" id="lbl-streak">Streak</span>
+      <span style="font-size:16px;font-weight:500;color:var(--war)" id="streakN">0 🔥</span>
+    </div>
+    <div style="display:flex;gap:4px" id="streakBar"></div>
+  </div>
+  <div class="card" style="margin-bottom:9px" id="wotdCard">
+    <div style="font-size:13px;font-weight:500;margin-bottom:6px" id="lbl-wotd">✨ Word of the Day</div>
+    <div id="wotd"></div>
+  </div>
+  <div class="card" style="margin-bottom:9px">
+    <div style="font-size:13px;font-weight:500;margin-bottom:6px" id="lbl-hardwords">Hard Words 😓</div>
+    <div id="hardList"></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-size:13px;font-weight:500">SRS Review</span>
+      <span id="dueBadge" style="font-size:11px;background:var(--dan-bg);color:var(--dan);padding:2px 7px;border-radius:9px">0</span>
+    </div>
+    <div id="duePreview" style="font-size:12px;color:var(--tx2);margin-bottom:7px"></div>
+    <button class="bp" style="width:100%;padding:8px" onclick="startSRS()" id="btn-srs">Start SRS Review</button>
+  </div>
+  <!-- Daily JLPT words (JP mode only) -->
+  <div class="card" style="margin-top:9px;display:none" id="dailyCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+      <span style="font-size:13px;font-weight:500">📅 今日JLPT单词</span>
+      <span style="font-size:11px;background:var(--bg3);border:1px solid var(--bd);padding:2px 7px;border-radius:9px;color:var(--tx2)">N1–N4</span>
+    </div>
+    <div id="dailyWords"></div>
+  </div>
+</div>
+
+<!-- WORDS -->
+<div class="sec" id="tab-words">
+  <div style="display:flex;gap:6px;margin-bottom:9px">
+    <input id="si" placeholder="Search..." oninput="rw()" style="flex:1">
+    <select id="sortSel" onchange="rw()" style="width:105px">
+      <option value="new" id="opt-newest">Newest</option>
+      <option value="alpha" id="opt-alpha">A–Z</option>
+      <option value="hard" id="opt-hard">Hardest</option>
+      <option value="due" id="opt-due">Due first</option>
+    </select>
+  </div>
+  <div class="fbar" id="catFilter"></div>
+  <div id="wordList"></div>
+</div>
+
+<!-- ADD -->
+<div class="sec" id="tab-add">
+  <div class="card" style="margin-bottom:9px" id="addFormCard">
+    <!-- Dynamic form rendered by JS -->
+  </div>
+  <!-- OCR Zone (JP mode only, shown via JS) -->
+  <div class="card" style="margin-bottom:9px" id="ocrCard" style="display:none">
+    <div style="font-size:12px;font-weight:500;color:var(--acc2);margin-bottom:7px">📷 截图/照片识别日语</div>
+    <div class="ocr-zone" id="ocrZone" onclick="document.getElementById('ocrInput').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="ocrDrop(event)">
+      <div style="font-size:22px;margin-bottom:4px">📷</div>
+      <div style="font-size:12px;color:var(--tx2)">点击上传图片 / 拖拽截图到此处</div>
+      <div style="font-size:11px;color:var(--tx2);margin-top:2px">支持 JPG、PNG、截图</div>
+    </div>
+    <input type="file" id="ocrInput" accept="image/*" capture="environment" style="display:none" onchange="ocrFile(event)">
+    <div id="ocrResult" style="display:none">
+      <div style="font-size:12px;color:var(--tx2);margin-bottom:5px">识别到的日语词汇 — 点击填入表单：</div>
+      <div id="ocrWords"></div>
+      <div style="font-size:11px;color:var(--tx2);margin-top:4px" id="ocrStatus"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-size:12px;font-weight:500;color:var(--acc2);margin-bottom:5px">⚡ <span id="lbl-bulk">Bulk Add</span></div>
+    <div style="font-size:11px;color:var(--tx2);margin-bottom:5px" id="lbl-bulkfmt">Format: word, meaning, example, level, category</div>
+    <textarea id="bulk" rows="3" placeholder=""></textarea>
+    <button class="bp" style="width:100%;margin-top:6px" onclick="bulkAdd()" id="btn-bulk">Bulk Import</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="sec" id="tab-quiz">
+  <div id="qSetup">
+    <div class="card" style="margin-bottom:9px">
+      <div class="row"><label class="lbl" id="lbl-qmode">Quiz Mode</label>
+        <select id="q-mode"><option value="mc" id="qm-mc">Multiple Choice</option><option value="spell" id="qm-spell">Spelling</option><option value="flip" id="qm-flip">Flashcard</option><option value="listen" id="qm-listen">Listening</option><option value="conj" id="qm-conj" style="display:none">動詞変形</option></select>
+      </div>
+      <div class="row"><label class="lbl" id="lbl-qdir">Direction</label>
+        <select id="q-dir"><option value="rand" id="qd-rand">Random</option><option value="a2b" id="qd-a2b">Word → Meaning</option><option value="b2a" id="qd-b2a">Meaning → Word</option></select>
+      </div>
+      <div class="row"><label class="lbl" id="lbl-qpool">Pool</label>
+        <select id="q-cat"><option value="">All</option><option value="hard" id="qp-hard">Hard words</option><option value="due" id="qp-due">SRS due</option></select>
+      </div>
+      <div class="row" style="margin-bottom:0"><label class="lbl" id="lbl-qcnt">Count</label>
+        <select id="q-cnt"><option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="all">All</option></select>
+      </div>
+    </div>
+    <button class="bp" style="width:100%;padding:10px" onclick="startQuiz()" id="btn-startquiz">Start Quiz</button>
+    <div id="qHist" style="margin-top:10px"></div>
+  </div>
+  <div id="qGame" style="display:none">
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);margin-bottom:6px">
+      <span id="qCnt">1/10</span><span id="qMode2" style="color:var(--acc2)"></span><span id="qSc">0</span>
+    </div>
+    <div class="pbar"><div class="pfill" id="qProg" style="width:0%"></div></div>
+    <div id="qMCPanel">
+      <div class="qcard" id="qCard" onclick="flipCard()">
+        <div class="flip-wrap" id="flipWrap">
+          <div class="fface" style="text-align:center">
+            <div class="qbig" id="qQ">---</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:5px;margin-top:4px">
+              <div class="qsub" id="qHint">Click to flip</div>
+              <button class="ico" onclick="event.stopPropagation();speakQ()" style="font-size:13px">🔊</button>
+            </div>
+            <div id="qPronD" style="font-size:11px;font-family:monospace;color:var(--acc2);margin-top:2px"></div>
+          </div>
+          <div class="fface fback" style="text-align:center">
+            <div id="qAnsWrap" style="font-size:16px;color:var(--acc2)"></div>
+            <div id="qExWrap" style="margin-top:5px;font-size:11px;color:var(--tx2);font-style:italic"></div>
+            <div id="qRootD" style="font-size:10px;color:var(--acc);margin-top:3px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="opts" id="qOpts"></div>
+    </div>
+    <div id="qSpellPanel" style="display:none">
+      <div class="card" style="text-align:center;margin-bottom:10px;cursor:default">
+        <div id="qSpellQ" style="font-size:14px;color:var(--tx2);margin-bottom:5px"></div>
+        <div id="qSpellSub" style="font-size:11px;font-family:monospace;color:var(--acc2)"></div>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:8px">
+        <input id="spellInp" class="spell-inp" placeholder="Type the word..." onkeydown="if(event.key==='Enter')checkSpell()">
+        <button class="bp" onclick="checkSpell()" id="btn-check">Check</button>
+        <button class="ico" onclick="speakQ()" style="font-size:14px">🔊</button>
+      </div>
+      <div id="spellFB" style="font-size:13px;text-align:center;min-height:18px;margin-bottom:8px"></div>
+    </div>
+    <div id="qListenPanel" style="display:none">
+      <div class="card" style="text-align:center;margin-bottom:10px;cursor:default">
+        <div style="font-size:13px;color:var(--tx2);margin-bottom:8px" id="lbl-listenq">Listen and choose</div>
+        <button class="bp" style="padding:8px 20px;font-size:15px" onclick="playListen()">▶ Play</button>
+        <div style="font-size:11px;color:var(--tx2);margin-top:4px" id="listenHint">Click to play</div>
+      </div>
+      <div class="opts" id="listenOpts"></div>
+    </div>
+    <div id="qConjPanel" style="display:none">
+      <div class="conj-q">
+        <div class="conj-form-badge" id="conjFormBadge"></div>
+        <div style="font-size:28px;font-weight:500;margin-bottom:3px" id="conjWord"></div>
+        <div style="font-size:12px;color:var(--tx2)" id="conjKana"></div>
+        <div style="font-size:11px;color:var(--tx2);margin-top:4px" id="conjMeaning"></div>
+      </div>
+      <div class="opts" id="conjOpts"></div>
+    </div>
+    <div style="display:flex;gap:6px"><button class="bg-btn" style="flex:1" onclick="endQuiz()" id="btn-endquiz">End</button></div>
+  </div>
+  <div id="qResult" style="display:none;text-align:center;padding:8px 0">
+    <div style="font-size:42px;margin-bottom:6px" id="resEmoji">🎉</div>
+    <div style="font-size:22px;font-weight:500;margin-bottom:3px" id="resPct">0%</div>
+    <div style="font-size:13px;color:var(--tx2);margin-bottom:13px" id="resDet"></div>
+    <div id="wrongList" style="text-align:left;margin-bottom:11px"></div>
+    <button class="bp" style="width:100%" onclick="backSetup()" id="btn-tryagain">Try Again</button>
+  </div>
+</div>
+
+<!-- MAP -->
+<div class="sec" id="tab-map">
+  <div style="font-size:13px;font-weight:500;margin-bottom:5px;color:var(--acc2)" id="lbl-maptitle">Word Family Map</div>
+  <div style="font-size:12px;color:var(--tx2);margin-bottom:8px" id="lbl-mapinfo">Add related words when creating entries to build visual word maps.</div>
+  <div style="display:flex;gap:6px;margin-bottom:8px">
+    <select id="mapCat" style="flex:1"><option value="">Choose category...</option></select>
+    <button class="bp" onclick="buildMap()" id="btn-genmap">Generate</button>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--bd);border-radius:10px;min-height:210px;overflow:hidden;position:relative;margin-bottom:8px">
+    <div style="text-align:center;color:var(--tx2);padding:50px 0;font-size:13px" id="mmEmpty">Choose a category or tap 🔗 on a word card</div>
+    <svg id="mmSvg" style="display:none;width:100%;min-height:210px"></svg>
+  </div>
+  <div style="font-size:11px;color:var(--tx2);margin-bottom:6px" id="lbl-relwords">Words with related entries:</div>
+  <div id="mapWordList"></div>
+</div>
+
+<!-- MORE -->
+<div class="sec" id="tab-more">
+  <div class="card" style="margin-bottom:8px">
+    <div style="font-size:12px;font-weight:500;color:var(--acc2);margin-bottom:7px" id="lbl-export">Export</div>
+    <div class="g2"><button class="bg-btn" onclick="exportW('txt')">📄 TXT</button><button class="bg-btn" onclick="exportW('csv')">📊 CSV</button></div>
+  </div>
+  <div class="card" style="margin-bottom:8px">
+    <div style="font-size:12px;font-weight:500;color:var(--acc2);margin-bottom:7px" id="lbl-import">Import CSV</div>
+    <input type="file" id="importFile" accept=".csv,.txt" onchange="importW(event)" style="font-size:12px;padding:5px">
+  </div>
+  <div class="card" style="margin-bottom:8px">
+    <div style="font-size:12px;font-weight:500;color:var(--acc2);margin-bottom:7px" id="lbl-voice">Voice</div>
+    <div class="row"><label class="lbl" id="lbl-accent">Accent / Language</label>
+      <select id="voiceLang">
+        <option value="en-US">English — American (en-US)</option>
+        <option value="en-GB">English — British (en-GB)</option>
+        <option value="en-AU">English — Australian (en-AU)</option>
+        <option value="ja-JP">日本語 (ja-JP)</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:center;gap:7px">
+      <label class="lbl" style="white-space:nowrap;margin:0" id="lbl-speed">Speed</label>
+      <input type="range" min="0.5" max="1.5" step="0.1" value="0.85" id="vRate" oninput="document.getElementById('rateV').textContent=this.value" style="flex:1">
+      <span style="font-size:11px;color:var(--tx2);min-width:22px" id="rateV">0.85</span>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:8px">
+    <div style="font-size:12px;font-weight:500;color:var(--acc2);margin-bottom:7px">Theme</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <button class="thbtn on" id="th-system" onclick="setTheme('system')">System</button>
+      <button class="thbtn" id="th-light" onclick="setTheme('light')">Light</button>
+      <button class="thbtn" id="th-dark" onclick="setTheme('dark')">Dark</button>
+      <button class="thbtn" id="th-blue" onclick="setTheme('blue')">Blue</button>
+      <button class="thbtn" id="th-purple" onclick="setTheme('purple')">Purple</button>
+    </div>
+  </div>
+  <div class="card">
+    <div style="font-size:12px;font-weight:500;color:var(--acc2);margin-bottom:7px" id="lbl-data">Data</div>
+    <div class="g2">
+      <button class="bg-btn" onclick="clearMastered()" id="btn-clearmaster">Clear mastered</button>
+      <button class="bd-btn" onclick="clearAll()" id="btn-clearall">Clear all</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ─── STATE ──────────────────────────────────────────
+let lang = localStorage.getItem('vocabLang') || 'en'; // 'en' or 'jp'
+let W = { en: [], jp: [] };
+try { W.en = JSON.parse(localStorage.getItem('vocabEN') || '[]'); } catch(e){}
+try { W.jp = JSON.parse(localStorage.getItem('vocabJP') || '[]'); } catch(e){}
+
+let QW=[],QI=0,QSc=0,QAns=false,QFlip=false,curMode='mc';
+let Hist = { en: [], jp: [] };
+try { Hist.en = JSON.parse(localStorage.getItem('histEN')||'[]'); } catch(e){}
+try { Hist.jp = JSON.parse(localStorage.getItem('histJP')||'[]'); } catch(e){}
+let aFilters=[];
+let curTheme=localStorage.getItem('vocabTheme')||'system';
+let defCount = 1; // number of definition fields
+let recognition = null;
+
+// ─── i18n ────────────────────────────────────────────
+const I18N = {
+  en: {
+    logo:'English Vocab', logoSub:'⇄ 日本語',
+    tabs:['Home','Words','Add','Quiz','Map','More'],
+    slTotal:'Total',slMastered:'Mastered',slHard:'Hard',slDue:'Due',
+    dailyGoal:'Daily Goal',perday:'words/day',streak:'Streak',
+    wotd:'✨ Word of the Day',hardWords:'Hard Words 😓',
+    fieldWord:'English Word *',fieldPron:'Pronunciation (IPA)',fieldMeaning:'Chinese Meaning',
+    fieldEx:'Example Sentence',fieldRoot:'Word Root / Etymology',fieldRel:'Related Words',
+    fieldLevel:'CEFR Level',fieldCat:'Category',
+    levels:['None','A1','A2','B1','B2','C1','C2','Phrase'],
+    cats:['None','Academic','Business','Daily','Literature','Tech','IELTS'],
+    placeholder:{word:'e.g. serendipity',pron:'/ˌsɛr.ənˈdɪp.ɪ.ti/',meaning:'e.g. 意外发现美好事物',ex:'e.g. It was pure serendipity.',root:'e.g. Latin: serenus (calm)',rel:'e.g. coincidence, luck'},
+    bulkFmt:'Format: word, meaning, example, level, category',
+    bulkPH:'ubiquitous,无处不在的,Technology is ubiquitous.,B2,Academic',
+    addDef:'+ Add another meaning',
+    voiceHint:'🎤 Tap to speak the word',
+    srsBtn:'Start SRS Review',
+    qModes:['Multiple Choice','Spelling','Flashcard','Listening'],
+    qDirs:['Random','Word → Meaning','Meaning → Word'],
+    qPool:['All','Hard words','SRS due'],
+    listenQ:'Listen and choose',
+    checkBtn:'Check',endBtn:'End',tryAgain:'Try Again',startQuiz:'Start Quiz',
+    genMap:'Generate',mapTitle:'Word Family Map',mapInfo:'Tap 🔗 on a word to build its family map.',
+    relWords:'Words with related entries:',
+    exportLbl:'Export',importLbl:'Import CSV',voiceLbl:'Voice',accentLbl:'Accent',speedLbl:'Speed',dataLbl:'Data',
+    clearMaster:'Clear mastered',clearAll:'Clear all',
+    noWords:'No words yet. Add some! ✍️',
+    searchPH:'Search words, meanings...',
+    goalDone:'🎉 Daily goal complete!',goalStatus:'Added {n}/{g} today',
+    sortNew:'Newest',sortAlpha:'A–Z',sortHard:'Hardest',sortDue:'Due first',
+    bulk:'Bulk Add',
+  },
+  jp: {
+    logo:'日語詞彙',logoSub:'⇄ English',
+    tabs:['主页','单词','添加','测试','联想图','更多'],
+    slTotal:'全部',slMastered:'已掌握',slHard:'困难词',slDue:'待复习',
+    dailyGoal:'今日目标',perday:'个/天',streak:'连续学习',
+    wotd:'✨ 每日单词',hardWords:'错题本 😓',
+    fieldWord:'日文 *',fieldPron:'读音（假名）',fieldMeaning:'中文意思',
+    fieldEx:'例句',fieldRoot:'联想词',fieldRel:'相关词',
+    fieldLevel:'JLPT 等级',fieldCat:'词性',
+    levels:['无','N1','N2','N3','N4','N5','词组'],
+    cats:['无','动词','名词','形容词','副词','其他'],
+    placeholder:{word:'例: 食べる',pron:'例: たべる',meaning:'例: 吃',ex:'例: 毎日ご飯を食べる。',root:'例: 飲む, 料理',rel:'例: 料理, 食事'},
+    bulkFmt:'格式：日文, 假名, 中文, 等级, 词性',
+    bulkPH:'食べる,たべる,吃,N4,动词\n飲む,のむ,喝,N4,动词',
+    addDef:'+ 添加另一个意思',
+    voiceHint:'🎤 点击语音输入单词',
+    srsBtn:'开始复习到期单词',
+    qModes:['四选一','拼写','翻牌','听力','動詞変形'],
+    qDirs:['随机切换','单词→意思','意思→单词'],
+    qPool:['全部','仅错题','待复习'],
+    listenQ:'听音频，选出正确单词',
+    checkBtn:'确认',endBtn:'结束',tryAgain:'再来一次',startQuiz:'开始测试',
+    genMap:'生成图',mapTitle:'词汇联想图',mapInfo:'在添加单词时填写联想词，点击🔗生成词族图。',
+    relWords:'有联想词的单词：',
+    exportLbl:'导出',importLbl:'导入 CSV',voiceLbl:'发音设置',accentLbl:'语言',speedLbl:'语速',dataLbl:'数据管理',
+    clearMaster:'清除掌握标记',clearAll:'清空全部',
+    noWords:'暂无单词，去添加吧 ✍️',
+    searchPH:'搜索日文 / 中文 / 假名...',
+    goalDone:'🎉 今日目标完成！',goalStatus:'今日已添加 {n}/{g} 个',
+    sortNew:'最新',sortAlpha:'字母',sortHard:'最难',sortDue:'待复习',
+    bulk:'批量添加',
+    formNames:{masu:'ます形',te:'て形',ta:'た形',nai:'ない形',meirei:'命令形',ishi:'意志形',ba:'ば形',kano:'可能形',ukemi:'受身形',keigo:'尊敬語',shieki:'使役形',shiekiukemi:'使役受身形',kinshi:'禁止形'},
+    verbForms:'動詞の形',
+    verbFormsHint:'填写该动词的各种变形（词性选"动词"后显示）',
+    conjQuizTitle:'变形测试',
+  }
+};
+
+function t(key){ return I18N[lang][key] || key; }
+function T(){ // apply translations to static elements
+  const i=I18N[lang];
+  document.getElementById('logoText').textContent=i.logo;
+  document.querySelectorAll('#tabBar .tab').forEach((el,idx)=>el.textContent=i.tabs[idx]);
+  document.getElementById('sl-total').textContent=i.slTotal;
+  document.getElementById('sl-mastered').textContent=i.slMastered;
+  document.getElementById('sl-hard').textContent=i.slHard;
+  document.getElementById('sl-due').textContent=i.slDue;
+  document.getElementById('lbl-dailygoal').textContent=i.dailyGoal;
+  document.getElementById('lbl-perday').textContent=i.perday;
+  document.getElementById('lbl-streak').textContent=i.streak;
+  document.getElementById('lbl-wotd').textContent=i.wotd;
+  document.getElementById('lbl-hardwords').textContent=i.hardWords;
+  document.getElementById('btn-srs').textContent=i.srsBtn;
+  document.getElementById('si').placeholder=i.searchPH;
+  document.getElementById('opt-newest').textContent=i.sortNew;
+  document.getElementById('opt-alpha').textContent=i.sortAlpha;
+  document.getElementById('opt-hard').textContent=i.sortHard;
+  document.getElementById('opt-due').textContent=i.sortDue;
+  document.getElementById('lbl-bulk').textContent=i.bulk;
+  document.getElementById('lbl-bulkfmt').textContent=i.bulkFmt;
+  document.getElementById('bulk').placeholder=i.bulkPH;
+  document.getElementById('btn-bulk').textContent=i.bulk;
+  document.getElementById('btn-startquiz').textContent=i.startQuiz;
+  document.getElementById('lbl-qmode').textContent='Mode';
+  document.getElementById('lbl-qdir').textContent='Direction';
+  document.getElementById('lbl-qpool').textContent='Pool';
+  document.getElementById('lbl-qcnt').textContent='Count';
+  document.getElementById('qm-mc').textContent=i.qModes[0];
+  document.getElementById('qm-spell').textContent=i.qModes[1];
+  document.getElementById('qm-flip').textContent=i.qModes[2];
+  document.getElementById('qm-listen').textContent=i.qModes[3];
+  document.getElementById('qd-rand').textContent=i.qDirs[0];
+  document.getElementById('qd-a2b').textContent=i.qDirs[1];
+  document.getElementById('qd-b2a').textContent=i.qDirs[2];
+  document.getElementById('qp-hard').textContent=i.qPool[1];
+  document.getElementById('qp-due').textContent=i.qPool[2];
+  document.getElementById('btn-endquiz').textContent=i.endBtn;
+  document.getElementById('btn-tryagain').textContent=i.tryAgain;
+  document.getElementById('lbl-maptitle').textContent=i.mapTitle;
+  document.getElementById('lbl-mapinfo').textContent=i.mapInfo;
+  document.getElementById('btn-genmap').textContent=i.genMap;
+  document.getElementById('lbl-relwords').textContent=i.relWords;
+  document.getElementById('lbl-export').textContent=i.exportLbl;
+  document.getElementById('lbl-import').textContent=i.importLbl;
+  document.getElementById('lbl-voice').textContent=i.voiceLbl;
+  document.getElementById('lbl-accent').textContent=i.accentLbl;
+  document.getElementById('lbl-speed').textContent=i.speedLbl;
+  document.getElementById('lbl-data').textContent=i.dataLbl;
+  document.getElementById('btn-clearmaster').textContent=i.clearMaster;
+  document.getElementById('btn-clearall').textContent=i.clearAll;
+  document.getElementById('lbl-listenq').textContent=i.listenQ;
+  // show/hide conj quiz mode (JP only)
+  const conjOpt=document.getElementById('qm-conj');
+  if(conjOpt) conjOpt.style.display=lang==='jp'?'':'none';
+  // voice default
+  document.getElementById('voiceLang').value = lang==='jp'?'ja-JP':'en-US';
+  // logo dot color hint
+  document.getElementById('langDot').style.background = lang==='jp'?'#f87171':'var(--acc)';
+}
+
+// ─── LANG SWITCH ─────────────────────────────────────
+function switchLang(){
+  lang = lang==='en'?'jp':'en';
+  localStorage.setItem('vocabLang', lang);
+  T();
+  renderAddForm();
+  buildCatFilter();
+  rw();
+  renderHome();
+  updateQuizPool();
+  notify(lang==='en'?'Switched to English':'已切换到日语模式');
+}
+
+// ─── SAVE/LOAD ────────────────────────────────────────
+function save(){ localStorage.setItem('vocabEN', JSON.stringify(W.en)); localStorage.setItem('vocabJP', JSON.stringify(W.jp)); }
+function cw(){ return W[lang]; }
+function notify(m,t=2200){ const n=document.getElementById('notif'); n.textContent=m; n.classList.add('show'); setTimeout(()=>n.classList.remove('show'),t); }
+
+// ─── SRS ─────────────────────────────────────────────
+function nextRev(w){ const b=w.srsBox||0; const iv=[1,2,4,7,14,30]; const d=new Date(); d.setDate(d.getDate()+iv[Math.min(b,iv.length-1)]); return d.toDateString(); }
+function isDue(w){ if(!w.nextReview)return true; return new Date(w.nextReview)<=new Date(); }
+function updSRS(w,ok){ if(ok) w.srsBox=(w.srsBox||0)+1; else{w.srsBox=0;w.wrongCount=(w.wrongCount||0)+1;} w.nextReview=nextRev(w); w.lastReviewed=new Date().toDateString(); }
+
+// ─── HOME ─────────────────────────────────────────────
+function renderHome(){
+  const ws=cw(), today=new Date().toDateString();
+  const goal=parseInt(document.getElementById('goalN').value)||5;
+  const todayN=ws.filter(w=>w.addedDate===today).length;
+  document.getElementById('ht').textContent=ws.length;
+  document.getElementById('hm').textContent=ws.filter(w=>w.mastered).length;
+  document.getElementById('hh').textContent=ws.filter(w=>(w.wrongCount||0)>=2).length;
+  const due=ws.filter(isDue);
+  document.getElementById('hd').textContent=due.length;
+  const pct=Math.min(todayN/goal*100,100);
+  document.getElementById('gCircle').style.strokeDashoffset=150.8*(1-pct/100);
+  document.getElementById('gPct').textContent=Math.round(pct)+'%';
+  document.getElementById('gStatus').textContent=todayN>=goal?t('goalDone'):t('goalStatus').replace('{n}',todayN).replace('{g}',goal);
+  const sk=lang+'Streak'; const sd=JSON.parse(localStorage.getItem(sk)||'[]');
+  let streak=0; for(let i=0;i<sd.length;i++){const d=new Date();d.setDate(d.getDate()-i);if(sd.includes(d.toDateString()))streak++;else break;}
+  document.getElementById('streakN').textContent=streak+' 🔥';
+  const bar=document.getElementById('streakBar'); bar.innerHTML='';
+  for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const done=sd.includes(d.toDateString());const el=document.createElement('div');el.className='sday'+(done?' done':'');el.textContent=d.getDate();bar.appendChild(el);}
+  // WOTD
+  if(ws.length){
+    const w=ws[new Date().getDate()%ws.length];
+    const head=lang==='en'?w.word:w.word;
+    const sub=lang==='en'?w.pron:(w.kana||'');
+    const def1=(w.defs&&w.defs[0])?w.defs[0].meaning:w.meaning||'';
+    const ex1=(w.defs&&w.defs[0]&&w.defs[0].ex)?w.defs[0].ex:'';
+    document.getElementById('wotd').innerHTML=`<div style="font-size:18px;font-weight:500">${head} <span style="font-size:13px;cursor:pointer;color:var(--acc2)" onclick="speak('${head.replace(/'/g,"\\'")}')">🔊</span></div>${sub?`<div style="font-size:11px;font-family:monospace;color:var(--tx2)">${sub}</div>`:''}<div style="font-size:13px;color:var(--tx2);margin-top:3px">${def1}</div>${ex1?`<div style="font-size:11px;color:var(--tx2);font-style:italic;margin-top:3px">"${ex1}"</div>`:''} ${w.root?`<div style="font-size:11px;color:var(--acc);margin-top:3px">📖 ${w.root}</div>`:''}`;
+  } else document.getElementById('wotd').innerHTML=`<div style="font-size:12px;color:var(--tx2)">${t('noWords')}</div>`;
+  const hard=ws.filter(w=>(w.wrongCount||0)>0).sort((a,b)=>(b.wrongCount||0)-(a.wrongCount||0)).slice(0,4);
+  document.getElementById('hardList').innerHTML=hard.length?hard.map(w=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px"><span>${w.word}<span style="color:var(--tx2);font-size:11px;margin-left:5px">${(w.defs&&w.defs[0])?w.defs[0].meaning:(w.meaning||'')}</span></span><span class="tag t-hard">${lang==='en'?'✗':'错'}${w.wrongCount}</span></div>`).join(''):`<div style="font-size:12px;color:var(--tx2);text-align:center;padding:6px">${lang==='en'?'No hard words yet 👍':'暂无错题 👍'}</div>`;
+  document.getElementById('dueBadge').textContent=due.length;
+  document.getElementById('duePreview').textContent=due.length?due.slice(0,3).map(w=>w.word).join(lang==='en'?', ':'、')+(due.length>3?'…':''):(lang==='en'?'All reviewed ✨':'全部已复习 ✨');
+  const dc=document.getElementById('dailyCard');if(dc)dc.style.display=lang==='jp'?'block':'none';
+  if(lang==='jp')renderDailyWords();
+  const oc=document.getElementById('ocrCard');if(oc)oc.style.display=lang==='jp'?'block':'none';
+}
+function saveGoal(){ localStorage.setItem(lang+'Goal', document.getElementById('goalN').value); renderHome(); }
+
+// ─── ADD FORM ──────────────────────────────────────────
+function renderAddForm(populate){
+  const i=I18N[lang]; const p=populate||{};
+  const levOpts=i.levels.map(l=>`<option value="${l==='None'||l==='无'?'':l}"${(p.level||'')===(l==='None'||l==='无'?'':l)?'selected':''}>${l}</option>`).join('');
+  const catOpts=i.cats.map(c=>`<option value="${c==='None'||c==='无'?'':c}"${(p.cat||'')===(c==='None'||c==='无'?'':c)?'selected':''}>${c}</option>`).join('');
+  // build defs
+  const defs=p.defs||[{meaning:'',ex:''}];
+  defCount=defs.length;
+  const defsHtml=defs.map((d,idx)=>buildDefHTML(idx,d.meaning,d.ex)).join('');
+  const extraFields = lang==='en'
+    ? `<div class="row"><label class="lbl">${i.fieldPron}</label><div style="display:flex;gap:6px"><input id="f-pron" value="${p.pron||''}" placeholder="${i.placeholder.pron}" style="flex:1"><button class="vbtn" id="vbtn-pron" onclick="voiceInput('f-pron','pron')" title="${i.voiceHint}">🎤</button></div></div>
+       <div class="row"><label class="lbl">${i.fieldRoot}</label><input id="f-root" value="${p.root||''}" placeholder="${i.placeholder.root}"></div>
+       <div class="row"><label class="lbl">${i.fieldRel}</label><input id="f-rel" value="${p.rel||''}" placeholder="${i.placeholder.rel}"></div>`
+    : `<div class="row"><label class="lbl">${i.fieldPron}</label><div style="display:flex;gap:6px"><input id="f-kana" value="${p.kana||''}" placeholder="${i.placeholder.pron}" style="flex:1"><button class="vbtn" id="vbtn-kana" onclick="voiceInput('f-kana','kana')" title="${i.voiceHint}">🎤</button></div></div>
+       <div class="row"><label class="lbl">${i.fieldRoot}</label><input id="f-root" value="${p.root||''}" placeholder="${i.placeholder.root}"></div>
+       <div class="row"><label class="lbl">${i.fieldRel}</label><input id="f-rel" value="${p.rel||''}" placeholder="${i.placeholder.rel}"></div>`;
+  const fms=p.forms||{};
+  const formKeys=['masu','te','ta','nai','meirei','ishi','ba','kano','ukemi','keigo','shieki','shiekiukemi','kinshi'];
+  const formNamesMap=lang==='jp'?I18N.jp.formNames:{};
+  const formsSection=lang==='jp'?`<div class="forms-section" id="verbFormsSection" style="display:${(p.cat==='动词'||p.cat==='動詞')?'block':'none'}">
+    <div class="forms-title" onclick="var g=document.getElementById('formsGrid');g.style.display=g.style.display==='none'?'grid':'none'">📋 ${I18N.jp.verbForms} <span style="font-size:10px;color:var(--tx2);font-weight:400">${I18N.jp.verbFormsHint}</span></div>
+    <div class="forms-grid" id="formsGrid">${formKeys.map(k=>`<div class="form-item"><label>${formNamesMap[k]}</label><input id="f-form-${k}" value="${fms[k]||''}" placeholder="${formNamesMap[k]}…"></div>`).join('')}</div>
+  </div>`:'';
+  document.getElementById('addFormCard').innerHTML=`
+    <div class="row"><label class="lbl">${i.fieldWord}</label>
+      <div style="display:flex;gap:6px">
+        <input id="f-word" value="${p.word||''}" placeholder="${i.placeholder.word}" style="flex:1">
+        <button class="vbtn" id="vbtn-word" onclick="voiceInput('f-word','word')" title="${i.voiceHint}">🎤</button>
+        <button class="bg-btn" onclick="speakAdd()" style="width:36px;padding:0;font-size:14px">🔊</button>
+      </div>
+    </div>
+    ${extraFields}
+    <div style="font-size:11px;color:var(--acc2);font-weight:500;margin-bottom:6px">${i.fieldMeaning}</div>
+    <div id="defsContainer">${defsHtml}</div>
+    <button class="add-def-btn" onclick="addDefField()">${i.addDef}</button>
+    <div class="g2" style="margin-bottom:9px">
+      <div><label class="lbl">${i.fieldLevel}</label><select id="f-lv">${levOpts}</select></div>
+      <div><label class="lbl">${i.fieldCat}</label><select id="f-cat" onchange="toggleFormsSection()">${catOpts}</select></div>
+    </div>
+    ${formsSection}
+    <div style="display:flex;gap:6px">
+      <button class="bp" onclick="addWord()" style="flex:1">+ ${lang==='en'?'Add Word':'添加单词'}</button>
+      <button class="bg-btn" onclick="renderAddForm()">${lang==='en'?'Clear':'清空'}</button>
+    </div>`;
+}
+
+function buildDefHTML(idx, meaning, ex){
+  const micM=lang==='jp'?`<button class="vbtn" id="vbtn-defm-${idx}" onclick="voiceInput('def-m-${idx}','defm-${idx}','zh-CN')" style="padding:4px 7px;font-size:12px;flex-shrink:0" title="语音输入中文意思">🎤</button>`:'';
+  const micE=`<button class="vbtn" id="vbtn-defe-${idx}" onclick="voiceInput('def-e-${idx}','defe-${idx}','${lang==='jp'?'ja-JP':'en-US'}')" style="padding:4px 7px;font-size:12px;flex-shrink:0" title="${lang==='jp'?'语音输入例句':'Voice example'}">🎤</button>`;
+  return `<div class="def-item" id="def-${idx}">
+    <div class="def-num">${lang==='en'?'Meaning':'意思'} ${idx+1}</div>
+    <button class="def-del" onclick="removeDef(${idx})">✕</button>
+    <div style="margin-bottom:5px;display:flex;gap:6px;align-items:center"><input id="def-m-${idx}" value="${meaning||''}" placeholder="${I18N[lang].placeholder.meaning}" style="flex:1">${micM}</div>
+    <div style="display:flex;gap:6px;align-items:flex-start"><textarea id="def-e-${idx}" rows="2" placeholder="${I18N[lang].placeholder.ex}" style="flex:1">${ex||''}</textarea>${micE}</div>
+  </div>`;
+}
+
+function addDefField(){
+  defCount++;
+  const container=document.getElementById('defsContainer');
+  const div=document.createElement('div');
+  div.innerHTML=buildDefHTML(defCount-1,'','');
+  container.appendChild(div.firstElementChild);
+}
+
+function removeDef(idx){
+  const el=document.getElementById('def-'+idx);
+  if(el&&document.querySelectorAll('#defsContainer .def-item').length>1) el.remove();
+  else notify(lang==='en'?'Need at least one meaning':'至少保留一个意思');
+}
+
+function collectDefs(){
+  const items=document.querySelectorAll('#defsContainer .def-item');
+  return Array.from(items).map(item=>{
+    const id=item.id.replace('def-','');
+    return {meaning:(document.getElementById('def-m-'+id)||{}).value.trim()||'',ex:(document.getElementById('def-e-'+id)||{}).value.trim()||''};
+  }).filter(d=>d.meaning);
+}
+
+// ─── VOICE INPUT ──────────────────────────────────────
+function voiceInput(targetId, fieldHint, forceLang){
+  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)){
+    notify(lang==='en'?'Speech not supported in this browser':'当前浏览器不支持语音输入'); return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(recognition){recognition.stop();recognition=null;}
+  recognition=new SR();
+  recognition.lang=forceLang||(lang==='jp'?'ja-JP':'en-US');
+  recognition.interimResults=false;
+  recognition.maxAlternatives=1;
+  const btn=document.getElementById('vbtn-'+fieldHint)||document.getElementById('vbtn-word');
+  if(btn){btn.classList.add('listening');btn.textContent='⏹';}
+  recognition.onresult=e=>{
+    const txt=e.results[0][0].transcript;
+    const inp=document.getElementById(targetId);
+    if(inp){inp.value=txt;}
+    if(btn){btn.classList.remove('listening');btn.classList.add('done');btn.textContent='✅';setTimeout(()=>{btn.classList.remove('done');btn.textContent='🎤';},1500);}
+    notify(lang==='en'?'Captured: '+txt:'识别：'+txt);
+  };
+  recognition.onerror=()=>{if(btn){btn.classList.remove('listening');btn.textContent='🎤';}notify(lang==='en'?'Voice error, try again':'语音识别失败，请重试');};
+  recognition.onend=()=>{if(btn)btn.classList.remove('listening');recognition=null;};
+  recognition.start();
+  notify(lang==='en'?'Listening… speak now':'正在聆听，请说话…');
+}
+
+// ─── ADD WORD ──────────────────────────────────────────
+function addWord(){
+  const word=(document.getElementById('f-word')||{}).value.trim();
+  const defs=collectDefs();
+  if(!word||!defs.length){notify(lang==='en'?'Word and at least one meaning required!':'单词和意思必填！');return;}
+  const today=new Date().toDateString();
+  const entry={
+    word, defs,
+    pron: lang==='en'?(document.getElementById('f-pron')||{}).value.trim():'',
+    kana: lang==='jp'?(document.getElementById('f-kana')||{}).value.trim():'',
+    root:(document.getElementById('f-root')||{}).value.trim(),
+    rel:(document.getElementById('f-rel')||{}).value.trim(),
+    level:(document.getElementById('f-lv')||{}).value,
+    cat:(document.getElementById('f-cat')||{}).value,
+    mastered:false, addedDate:today, srsBox:0, nextReview:today, wrongCount:0
+  };
+  if(lang==='jp'){const fk=['masu','te','ta','nai','meirei','ishi','ba','kano','ukemi','keigo','shieki','shiekiukemi','kinshi'];const fm={};fk.forEach(k=>{const v=(document.getElementById('f-form-'+k)||{}).value;if(v&&v.trim())fm[k]=v.trim();});if(Object.keys(fm).length)entry.forms=fm;}
+  cw().unshift(entry); save();
+  if(lang==='jp')autoSupplement(cw()[0]);
+  const sk=lang+'Streak'; const sd=JSON.parse(localStorage.getItem(sk)||'[]');
+  if(!sd.includes(today)){sd.push(today);localStorage.setItem(sk,JSON.stringify(sd));}
+  renderAddForm(); notify((lang==='en'?'✅ Added: ':'✅ 已添加：')+word); buildCatFilter();
+}
+
+function speakAdd(){const t=(document.getElementById('f-word')||{}).value;if(t)speak(t);}
+function toggleFormsSection(){const cat=(document.getElementById('f-cat')||{}).value;const sec=document.getElementById('verbFormsSection');if(sec)sec.style.display=(cat==='动词'||cat==='動詞')?'block':'none';}
+
+function bulkAdd(){
+  const lines=document.getElementById('bulk').value.trim().split('\n').filter(Boolean);
+  let c=0; const today=new Date().toDateString();
+  lines.forEach(l=>{
+    const p=l.split(/[,，]/).map(s=>s.trim());
+    if(p[0]&&p[1]){
+      cw().unshift({word:p[0],defs:[{meaning:p[1],ex:p[2]||''}],pron:'',kana:lang==='jp'?(p[1]||''):'',root:'',rel:'',level:p[3]||'',cat:p[4]||'',mastered:false,addedDate:today,srsBox:0,nextReview:today,wrongCount:0});c++;
+    }
+  });
+  if(c){save();document.getElementById('bulk').value='';notify((lang==='en'?'✅ Added ':'✅ 批量添加 ')+c+(lang==='en'?' words':' 个'));buildCatFilter();}
+  else notify(lang==='en'?'Check format':'格式有误');
+}
+
+// ─── WORDS TAB ────────────────────────────────────────
+function tagCls(v){
+  const jpM={'N1':'t-n1','N2':'t-n2','N3':'t-n3','N4':'t-n4','N5':'t-n5','动词':'t-verb','名词':'t-noun','形容词':'t-adj','副词':'t-adv','词组':'t-phrase'};
+  const enM={'A1':'t-a1','A2':'t-a2','B1':'t-b1','B2':'t-b2','C1':'t-c1','C2':'t-c2','Phrase':'t-phrase'};
+  return (lang==='jp'?jpM:enM)[v]||'t-other';
+}
+
+function buildCatFilter(){
+  const cats=[...new Set(cw().flatMap(w=>[w.level,w.cat].filter(Boolean)))];
+  const all=lang==='en'?'All':'全部';
+  document.getElementById('catFilter').innerHTML=`<div class="chip on" onclick="toggleF('',this)">${all}</div>`+cats.map(c=>`<div class="chip" onclick="toggleF('${c}',this)">${c}</div>`).join('');
+  updateQuizPool();
+}
+
+function updateQuizPool(){
+  const sel=document.getElementById('q-cat'); if(!sel)return;
+  const baseopts=`<option value="">All</option><option value="hard">${I18N[lang].qPool[1]}</option><option value="due">${I18N[lang].qPool[2]}</option>`;
+  const cats=[...new Set(cw().flatMap(w=>[w.level,w.cat].filter(Boolean)))];
+  sel.innerHTML=baseopts+cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+
+function toggleF(v,el){
+  if(v===''){aFilters=[];document.querySelectorAll('#catFilter .chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+  else{document.querySelector('#catFilter .chip').classList.remove('on');el.classList.toggle('on');aFilters=el.classList.contains('on')?[...aFilters,v]:aFilters.filter(f=>f!==v);if(!aFilters.length)document.querySelector('#catFilter .chip').classList.add('on');}
+  rw();
+}
+
+function rw(){
+  const q=(document.getElementById('si').value||'').toLowerCase();
+  const sort=document.getElementById('sortSel').value;
+  let list=cw().filter(w=>{
+    const deftxt=(w.defs||[]).map(d=>d.meaning+' '+d.ex).join(' ').toLowerCase();
+    const m=!q||(w.word||'').toLowerCase().includes(q)||deftxt.includes(q)||(w.kana||'').toLowerCase().includes(q);
+    const f=!aFilters.length||aFilters.some(x=>w.level===x||w.cat===x);
+    return m&&f;
+  });
+  if(sort==='alpha')list.sort((a,b)=>a.word.localeCompare(b.word));
+  else if(sort==='hard')list.sort((a,b)=>(b.wrongCount||0)-(a.wrongCount||0));
+  else if(sort==='due')list.sort((a,b)=>isDue(b)?1:-1);
+  const el=document.getElementById('wordList');
+  if(!list.length){el.innerHTML=`<div class="empty">${t('noWords')}</div>`;return;}
+  el.innerHTML=list.map(w=>{
+    const ri=cw().indexOf(w);
+    const tags=[w.level,w.cat].filter(Boolean).map(t=>`<span class="tag ${tagCls(t)}">${t}</span>`).join('');
+    const defs=w.defs||[{meaning:w.meaning||'',ex:''}];
+    const defsHTML=defs.map((d,i)=>`<div style="margin-top:${i?4:2}px"><span style="font-size:10px;color:var(--acc2);font-weight:500">${i+1}.</span> <span style="font-size:12px;color:var(--tx2)">${d.meaning}</span>${d.ex?`<div style="font-size:11px;color:var(--tx2);font-style:italic;margin-left:12px">"${d.ex}"</div>`:''}</div>`).join('');
+    const sub = lang==='en'?(w.pron||''):(w.kana||'');
+    return `<div class="wcard${w.mastered?' mastered':''}">
+      <div style="font-size:17px;cursor:pointer;margin-top:2px" onclick="toggleMaster(${ri})">${w.mastered?'✅':'⬜'}</div>
+      <div class="wmain">
+        <div style="display:flex;align-items:baseline;gap:5px">
+          <span class="whead">${w.word}</span>
+          <span style="font-size:11px;cursor:pointer;color:var(--acc2)" onclick="speak('${w.word.replace(/'/g,"\\'")}')">🔊</span>
+        </div>
+        ${sub?`<div class="wsub">${sub}</div>`:''}
+        ${defsHTML}
+        ${w.root?`<div class="wroot">📖 ${w.root}</div>`:''}
+        ${w.rel?`<div style="font-size:10px;color:var(--tx2);margin-top:2px">🔗 ${w.rel}</div>`:''}
+        ${(lang==='jp'&&w.forms&&Object.keys(w.forms).length)?`<div class="wforms">${Object.entries(w.forms).map(([k,v])=>`<span class="wform-chip"><span>${I18N.jp.formNames[k]||k}</span>${v}</span>`).join('')}</div>`:''}
+        <div class="wtags">${tags}${isDue(w)?`<span class="tag t-due">${lang==='en'?'Due':'待复习'}</span>`:''}${(w.wrongCount||0)>=2?`<span class="tag t-hard">${lang==='en'?'✗':'错'}${w.wrongCount}</span>`:''}</div>
+      </div>
+      <div class="wact">
+        <button class="ico" onclick="editWord(${ri})">✏️</button>
+        <button class="ico" onclick="mapWord(${ri})">🔗</button>
+        <button class="ico" onclick="deleteWord(${ri})">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleMaster(i){cw()[i].mastered=!cw()[i].mastered;save();rw();}
+function deleteWord(i){const w=cw()[i];if(confirm((lang==='en'?'Delete "':'删除「')+w.word+(lang==='en'?'"?':'」？'))){cw().splice(i,1);save();rw();buildCatFilter();notify(lang==='en'?'Deleted':'已删除');}}
+function editWord(i){const w=cw()[i];const copy=JSON.parse(JSON.stringify(w));cw().splice(i,1);save();sw('add');renderAddForm(copy);}
+function mapWord(i){const w=cw()[i];if(!w.rel){notify(lang==='en'?'Add related words to use Word Map':'请先填写联想词');return;}sw('map');setTimeout(()=>buildMapForWord(w),80);}
+
+// ─── SPEECH ───────────────────────────────────────────
+function speak(text,langOverride){
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=langOverride||document.getElementById('voiceLang').value||(lang==='jp'?'ja-JP':'en-US');
+  u.rate=parseFloat(document.getElementById('vRate').value||0.85);
+  window.speechSynthesis.speak(u);
+}
+function speakQ(){const w=QW[QI];if(w)speak(w.word);}
+
+// ─── QUIZ ─────────────────────────────────────────────
+function getPool(){
+  const cat=document.getElementById('q-cat').value;
+  let pool=cat==='hard'?cw().filter(w=>(w.wrongCount||0)>0):cat==='due'?cw().filter(isDue):cw().filter(w=>!cat||(w.level===cat||w.cat===cat));
+  if(pool.length<2){notify(lang==='en'?'Need at least 2 words!':'单词不足2个！');return null;}
+  return [...pool].sort(()=>Math.random()-.5).slice(0,document.getElementById('q-cnt').value==='all'?pool.length:Math.min(parseInt(document.getElementById('q-cnt').value),pool.length));
+}
+function startSRS(){const due=cw().filter(isDue);if(due.length<2){notify(lang==='en'?'Need 2+ due':'待复习不足2个');return;}QW=due.sort(()=>Math.random()-.5);QI=0;QSc=0;curMode='mc';sw('quiz');showGame();}
+function startQuiz(){
+  const mode=document.getElementById('q-mode').value;
+  if(mode==='conj'){
+    const pool=getVerbPool();
+    if(pool.length<1){notify('请先添加有变形数据的动词！');return;}
+    QW=[...pool].sort(()=>Math.random()-.5).slice(0,document.getElementById('q-cnt').value==='all'?pool.length:Math.min(parseInt(document.getElementById('q-cnt').value),pool.length));
+    QI=0;QSc=0;curMode='conj';showGame();return;
+  }
+  const pool=getPool();if(!pool)return;QW=pool;QI=0;QSc=0;curMode=mode;showGame();
+}
+function showGame(){document.getElementById('qSetup').style.display='none';document.getElementById('qResult').style.display='none';document.getElementById('qGame').style.display='block';loadQ();}
+
+function loadQ(){
+  if(QI>=QW.length){showResult();return;}
+  QFlip=false;QAns=false;
+  const w=QW[QI];
+  const dir=document.getElementById('q-dir').value;
+  const isWord2Def=dir==='a2b'||(dir==='rand'&&Math.random()>.5);
+  document.getElementById('qCnt').textContent=(QI+1)+'/'+QW.length;
+  document.getElementById('qSc').textContent=(lang==='en'?'Score:':'得分:')+QSc;
+  document.getElementById('qProg').style.width=(QI/QW.length*100)+'%';
+  const def1=(w.defs&&w.defs[0])?w.defs[0].meaning:(w.meaning||'');
+  if(curMode==='conj'){
+    ['qMCPanel','qSpellPanel','qListenPanel'].forEach(id=>document.getElementById(id).style.display='none');
+    document.getElementById('qConjPanel').style.display='block';
+    document.getElementById('qMode2').textContent=I18N.jp.conjQuizTitle||'動詞変形';
+    loadConjQ(w);return;
+  }
+  document.getElementById('qConjPanel').style.display='none';
+  if(curMode==='listen'){
+    ['qMCPanel','qSpellPanel'].forEach(id=>document.getElementById(id).style.display='none');
+    document.getElementById('qListenPanel').style.display='block';
+    document.getElementById('qMode2').textContent=t('qModes')[3];
+    document.getElementById('listenHint').textContent=lang==='en'?'Click to play':'点击播放';
+    buildListenOpts(w);return;
+  }
+  if(curMode==='spell'){
+    ['qMCPanel','qListenPanel'].forEach(id=>document.getElementById(id).style.display='none');
+    document.getElementById('qSpellPanel').style.display='block';
+    document.getElementById('qMode2').textContent=t('qModes')[1];
+    document.getElementById('qSpellQ').textContent=def1;
+    document.getElementById('qSpellSub').textContent=lang==='en'?(w.pron||''):(w.kana||'');
+    const inp=document.getElementById('spellInp');inp.value='';inp.className='spell-inp';inp.disabled=false;
+    document.getElementById('spellFB').textContent='';
+    setTimeout(()=>inp.focus(),80);return;
+  }
+  ['qSpellPanel','qListenPanel','qConjPanel'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById('qMCPanel').style.display='block';
+  document.getElementById('qMode2').textContent=curMode==='flip'?t('qModes')[2]:(isWord2Def?t('qDirs')[1]:t('qDirs')[2]);
+  document.getElementById('qCard')._dir=isWord2Def;
+  document.getElementById('flipWrap').classList.remove('flipped');
+  document.getElementById('qQ').textContent=isWord2Def?w.word:def1;
+  document.getElementById('qPronD').textContent=isWord2Def?(lang==='en'?(w.pron||''):(w.kana||'')):'';
+  document.getElementById('qHint').textContent=lang==='en'?'Click to flip':'点击翻牌';
+  // answer side: all defs
+  const allDefs=(w.defs||[{meaning:w.meaning||''}]).map((d,i)=>`<div style="margin-bottom:3px"><span style="font-size:10px;color:var(--acc2)">${i+1}. </span>${isWord2Def?d.meaning:w.word}</div>${d.ex?`<div style="font-size:10px;color:var(--tx2);font-style:italic;margin-bottom:4px">"${d.ex}"</div>`:''}`).join('');
+  document.getElementById('qAnsWrap').innerHTML=isWord2Def?allDefs:`<div style="font-size:20px;font-weight:500">${w.word}</div>`;
+  document.getElementById('qExWrap').textContent='';
+  document.getElementById('qRootD').textContent=w.root?'📖 '+w.root:'';
+  if(curMode==='flip'){document.getElementById('qOpts').innerHTML=`<button class="opt" onclick="markFlip(true)" style="border-color:var(--suc);color:var(--suc)">✓ ${lang==='en'?'Got it':'记住了'}</button><button class="opt" onclick="markFlip(false)" style="border-color:var(--dan);color:var(--dan)">✗ ${lang==='en'?'Missed':'没记住'}</button>`;}
+  else buildMCOpts(w,isWord2Def,def1);
+}
+
+function buildMCOpts(w,isWord2Def,def1){
+  const oth=cw().filter(x=>x!==w).sort(()=>Math.random()-.5).slice(0,3);
+  document.getElementById('qOpts').innerHTML=[w,...oth].sort(()=>Math.random()-.5).map(o=>{
+    const d1o=(o.defs&&o.defs[0])?o.defs[0].meaning:(o.meaning||'');
+    return `<button class="opt" onclick="ansQ(this,'${o===w?'ok':'no'}')">${isWord2Def?d1o:o.word}</button>`;
+  }).join('');
+}
+function buildListenOpts(w){
+  const oth=cw().filter(x=>x!==w).sort(()=>Math.random()-.5).slice(0,3);
+  const def1=(w.defs&&w.defs[0])?w.defs[0].meaning:(w.meaning||'');
+  document.getElementById('listenOpts').innerHTML=[w,...oth].sort(()=>Math.random()-.5).map(o=>{
+    const od=(o.defs&&o.defs[0])?o.defs[0].meaning:(o.meaning||'');
+    return `<button class="opt listen-opt" onclick="ansListen(this,'${o===w?'ok':'no'}')">${o.word}${lang==='jp'&&o.kana?'<br><span style="font-size:10px;color:var(--tx2)">'+o.kana+'</span>':''}<br><span style="font-size:11px;color:var(--tx2)">${od}</span></button>`;
+  }).join('');
+}
+function playListen(){const w=QW[QI];if(w){speak(w.word);document.getElementById('listenHint').textContent=lang==='en'?'Playing…':'正在朗读…';}}
+function ansListen(btn,res){if(QAns)return;QAns=true;const ok=res==='ok';if(ok)QSc++;updSRS(QW[QI],ok);save();btn.classList.add(res);if(!ok){document.querySelectorAll('#listenOpts .opt').forEach(b=>{if(b.textContent.includes(QW[QI].word))b.classList.add('ok');});}document.querySelectorAll('#listenOpts .opt').forEach(b=>b.disabled=true);setTimeout(()=>{QI++;loadQ();},900);}
+function markFlip(ok){if(QAns)return;QAns=true;if(ok)QSc++;updSRS(QW[QI],ok);save();setTimeout(()=>{QI++;loadQ();},350);}
+function flipCard(){if(!QAns&&curMode!=='spell'&&curMode!=='listen'){document.getElementById('flipWrap').classList.toggle('flipped');QFlip=!QFlip;}}
+function checkSpell(){const w=QW[QI];const inp=document.getElementById('spellInp');const val=inp.value.trim().toLowerCase();const ok=val===w.word.toLowerCase();inp.className='spell-inp '+(ok?'ok':'no');inp.disabled=true;document.getElementById('spellFB').innerHTML=ok?`<span style="color:var(--suc)">✓ ${lang==='en'?'Correct!':'正确！'}</span>`:`<span style="color:var(--dan)">${lang==='en'?'✗ Answer: ':'✗ 正确答案：'}<strong>${w.word}</strong></span>`;if(ok)QSc++;updSRS(w,ok);save();setTimeout(()=>{QI++;loadQ();},1200);}
+function ansQ(btn,res){if(QAns)return;QAns=true;const ok=res==='ok';if(ok)QSc++;updSRS(QW[QI],ok);save();btn.classList.add(res);if(!ok){const isW=document.getElementById('qCard')._dir;const def1=(QW[QI].defs&&QW[QI].defs[0])?QW[QI].defs[0].meaning:(QW[QI].meaning||'');document.querySelectorAll('.opt').forEach(b=>{if(b.textContent===(isW?def1:QW[QI].word))b.classList.add('ok');});}document.querySelectorAll('.opt').forEach(b=>b.disabled=true);setTimeout(()=>{QI++;loadQ();},900);}
+// ─── CONJ QUIZ ────────────────────────────────────────
+const FORM_KEYS=['masu','te','ta','nai','meirei','ishi','ba','kano','ukemi','keigo','shieki','shiekiukemi','kinshi'];
+let conjFormKey=''; // current form being tested
+function getVerbPool(){
+  // verbs that have at least one form filled
+  return cw().filter(w=>w.forms&&Object.keys(w.forms).length>0);
+}
+function loadConjQ(w){
+  // pick a random form that this verb has filled
+  const available=FORM_KEYS.filter(k=>w.forms&&w.forms[k]);
+  if(!available.length){// no forms: skip this verb
+    QI++;loadQ();return;
+  }
+  conjFormKey=available[Math.floor(Math.random()*available.length)];
+  const correctAns=w.forms[conjFormKey];
+  const formName=I18N.jp.formNames[conjFormKey];
+  document.getElementById('conjFormBadge').textContent=formName+' は？';
+  document.getElementById('conjWord').textContent=w.word;
+  document.getElementById('conjKana').textContent=w.kana||'';
+  document.getElementById('conjMeaning').textContent=(w.defs&&w.defs[0])?w.defs[0].meaning:'';
+  // build 4 options: correct + up to 3 distractors (same form from other verbs, or other forms of same verb)
+  let distractors=[];
+  const others=cw().filter(x=>x!==w&&x.forms&&x.forms[conjFormKey]);
+  others.sort(()=>Math.random()-.5).slice(0,2).forEach(x=>distractors.push(x.forms[conjFormKey]));
+  // fill up with other forms of the same verb
+  if(distractors.length<3){
+    FORM_KEYS.filter(k=>k!==conjFormKey&&w.forms&&w.forms[k]).sort(()=>Math.random()-.5).forEach(k=>{if(distractors.length<3)distractors.push(w.forms[k]);});
+  }
+  // deduplicate and trim
+  distractors=[...new Set(distractors.filter(d=>d&&d!==correctAns))].slice(0,3);
+  // shuffle all options
+  const opts=[{text:correctAns,ok:true},...distractors.map(d=>({text:d,ok:false}))].sort(()=>Math.random()-.5);
+  document.getElementById('conjOpts').innerHTML=opts.map(o=>`<button class="opt" onclick="ansConj(this,'${o.ok?'ok':'no'}','${correctAns.replace(/'/g,"\\'")}','${conjFormKey}')">${o.text}</button>`).join('');
+}
+function ansConj(btn,res,correctAns,formKey){
+  if(QAns)return;QAns=true;
+  const ok=res==='ok';
+  if(ok)QSc++;
+  updSRS(QW[QI],ok);save();
+  btn.classList.add(res);
+  if(!ok){document.querySelectorAll('#conjOpts .opt').forEach(b=>{if(b.textContent===correctAns)b.classList.add('ok');});}
+  document.querySelectorAll('#conjOpts .opt').forEach(b=>b.disabled=true);
+  setTimeout(()=>{QI++;loadQ();},900);
+}
+function endQuiz(){if(QW.length)showResult();else backSetup();}
+function showResult(){
+  document.getElementById('qGame').style.display='none';document.getElementById('qResult').style.display='block';
+  const pct=QW.length?Math.round(QSc/QW.length*100):0;
+  document.getElementById('resPct').textContent=pct+'%';
+  document.getElementById('resDet').textContent=QSc+'/'+QW.length+(lang==='en'?' correct':' 正确');
+  document.getElementById('resEmoji').textContent=pct>=90?'🎉':pct>=70?'👍':pct>=50?'💪':'📖';
+  const wrong=QW.filter(w=>(w.wrongCount||0)>0).sort((a,b)=>b.wrongCount-a.wrongCount);
+  document.getElementById('wrongList').innerHTML=wrong.length?`<div style="font-size:12px;font-weight:500;color:var(--dan);margin-bottom:5px">${lang==='en'?'Missed':'本次答错'}</div>`+wrong.slice(0,5).map(w=>{const d=(w.defs&&w.defs[0])?w.defs[0].meaning:(w.meaning||'');return`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd);font-size:12px"><span>${w.word} <span style="color:var(--tx2)">${d}</span></span><span style="color:var(--dan)">${lang==='en'?'✗':'错'}${w.wrongCount}</span></div>`}).join(''):'';
+  const h=Hist[lang]; h.unshift({date:new Date().toLocaleDateString(),score:QSc,total:QW.length,pct,mode:curMode});
+  if(h.length>10)h.pop(); localStorage.setItem('hist'+lang.toUpperCase(),JSON.stringify(h));
+}
+function backSetup(){document.getElementById('qResult').style.display='none';document.getElementById('qGame').style.display='none';document.getElementById('qSetup').style.display='block';renderHist();}
+function renderHist(){const el=document.getElementById('qHist');const h=Hist[lang];if(!h.length){el.innerHTML='';return;}el.innerHTML=`<div style="font-size:11px;color:var(--tx2);margin-bottom:4px">${lang==='en'?'Recent':'近期记录'}</div>`+h.slice(0,5).map(x=>`<div style="display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid var(--bd)"><span style="color:var(--tx2)">${x.date}</span><span>${x.mode}</span><span>${x.score}/${x.total}</span><span style="color:${x.pct>=70?'var(--suc)':'var(--dan)'}">${x.pct}%</span></div>`).join('');}
+
+// ─── WORD MAP ─────────────────────────────────────────
+function initMap(){
+  const cats=[...new Set(cw().flatMap(w=>[w.level,w.cat].filter(Boolean)))];
+  const ph=lang==='en'?'Choose category...':'选择类别...';
+  document.getElementById('mapCat').innerHTML=`<option value="">${ph}</option>`+cats.map(c=>`<option>${c}</option>`).join('');
+  const hasRel=cw().filter(w=>w.rel);
+  document.getElementById('mapWordList').innerHTML=hasRel.length?hasRel.map(w=>`<span style="display:inline-block;background:var(--bg2);border:1px solid var(--bd);border-radius:7px;padding:3px 8px;margin:2px;font-size:12px;cursor:pointer" onclick="buildMapForWord(cw().find(x=>x.word===\`${w.word.replace(/`/g,'')}\`))">${w.word}</span>`).join(''):`<div style="font-size:12px;color:var(--tx2)">${t('mapInfo')}</div>`;
+}
+function buildMap(){
+  const cat=document.getElementById('mapCat').value;if(!cat){notify(lang==='en'?'Choose a category':'请选择类别');return;}
+  const ws=cw().filter(w=>w.level===cat||w.cat===cat).slice(0,12);
+  if(!ws.length){notify(lang==='en'?'No words in this category':'该分类暂无单词');return;}
+  drawMap(ws[0].word,ws.map(w=>w.word),ws.map(w=>(w.defs&&w.defs[0])?w.defs[0].meaning:(w.meaning||'')));
+}
+function buildMapForWord(w){
+  if(!w||!w.rel){notify(lang==='en'?'No related words':'没有联想词');return;}
+  const rels=w.rel.split(/[,，]/).map(s=>s.trim()).filter(Boolean);
+  const all=[w.word,...rels];
+  const meanings=[(w.defs&&w.defs[0])?w.defs[0].meaning:(w.meaning||''),...rels.map(r=>{const f=cw().find(x=>x.word.toLowerCase()===r.toLowerCase());return f?(f.defs&&f.defs[0])?f.defs[0].meaning:(f.meaning||''):r;})];
+  drawMap(w.word,all,meanings);
+}
+function drawMap(center,nodes,meanings){
+  document.getElementById('mmEmpty').style.display='none';
+  const svg=document.getElementById('mmSvg');svg.style.display='block';
+  const SW=560,SH=230;svg.setAttribute('viewBox',`0 0 ${SW} ${SH}`);
+  const cx=SW/2,cy=SH/2,r=82;let html='';
+  nodes.forEach((n,i)=>{
+    let x,y;
+    if(i===0){x=cx;y=cy;}else{const a=(i-1)/(nodes.length-1)*2*Math.PI;x=cx+r*Math.cos(a);y=cy+r*Math.sin(a);}
+    if(i>0)html+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--acc)" stroke-width="1.5" stroke-opacity="0.3"/>`;
+    const isC=i===0;const nr=isC?30:21;
+    html+=`<circle cx="${x}" cy="${y}" r="${nr}" fill="${isC?'var(--acc)':'var(--bg3)'}" stroke="var(--acc)" stroke-width="${isC?0:1}"/>`;
+    const lbl=n.length>9?n.slice(0,8)+'…':n;
+    html+=`<text x="${x}" y="${y+1}" text-anchor="middle" dominant-baseline="middle" font-size="${isC?11:10}" fill="${isC?'#fff':'var(--tx)'}" font-family="system-ui">${lbl}</text>`;
+    if(meanings[i]){const ml=(meanings[i]||'').slice(0,5);html+=`<text x="${x}" y="${y+(isC?22:15)}" text-anchor="middle" font-size="9" fill="var(--tx2)" font-family="system-ui">${ml}</text>`;}
+  });
+  svg.innerHTML=html;
+}
+
+// ─── EXPORT / IMPORT ──────────────────────────────────
+function exportW(fmt){
+  const ws=cw(); if(!ws.length){notify(lang==='en'?'No words':'暂无单词');return;}
+  let c,name,type;
+  if(fmt==='csv'){
+    const hdr=lang==='en'?'word,pronunciation,meaning1,ex1,meaning2,ex2,meaning3,ex3,root,related,level,category,mastered\n':'日文,假名,意思1,例句1,意思2,例句2,意思3,例句3,联想词,相关词,等级,词性,已掌握\n';
+    c=hdr+ws.map(w=>{
+      const d=w.defs||[];
+      const cols=[w.word,lang==='en'?(w.pron||''):(w.kana||''),
+        (d[0]&&d[0].meaning)||'',(d[0]&&d[0].ex)||'',
+        (d[1]&&d[1].meaning)||'',(d[1]&&d[1].ex)||'',
+        (d[2]&&d[2].meaning)||'',(d[2]&&d[2].ex)||'',
+        w.root||'',w.rel||'',w.level||'',w.cat||'',w.mastered?'yes':'no'];
+      return cols.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');
+    }).join('\n');
+    name=lang==='en'?'vocab.csv':'日语单词.csv';type='text/csv';
+  }else{
+    c=ws.map(w=>{
+      const d=w.defs||[{meaning:w.meaning||'',ex:''}];
+      const defLines=d.map((x,i)=>`  ${i+1}. ${x.meaning}${x.ex?'\n     "'+x.ex+'"':''}`).join('\n');
+      return `${w.word}${lang==='en'?(w.pron?' ['+w.pron+']':''):(w.kana?' ('+w.kana+')':'')}\n${defLines}${w.root?'\n📖 '+w.root:''}`;
+    }).join('\n\n');
+    name=lang==='en'?'vocab.txt':'日语单词.txt';type='text/plain';
+  }
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+c],{type}));a.download=name;a.click();notify(lang==='en'?'✅ Exported':'✅ 导出成功');
+}
+function importW(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const lines=ev.target.result.split('\n').filter(Boolean);let c=0;const today=new Date().toDateString();
+    lines.forEach((l,i)=>{
+      if(i===0&&(l.startsWith('word')||l.startsWith('日文')))return;
+      const p=l.replace(/^"|"$/g,'').split(/","?|,/).map(s=>s.replace(/^"|"$/g,'').trim());
+      if(p[0]&&p[2]){
+        const defs=[{meaning:p[2],ex:p[3]||''}];
+        if(p[4])defs.push({meaning:p[4],ex:p[5]||''});
+        if(p[6])defs.push({meaning:p[6],ex:p[7]||''});
+        cw().push({word:p[0],pron:lang==='en'?(p[1]||''):'',kana:lang==='jp'?(p[1]||''):'',defs,root:p[8]||'',rel:p[9]||'',level:p[10]||'',cat:p[11]||'',mastered:p[12]==='yes',addedDate:today,srsBox:0,nextReview:today,wrongCount:0});c++;
+      }
+    });
+    if(c){save();notify((lang==='en'?'✅ Imported ':'✅ 导入 ')+c+(lang==='en'?' words':' 个'));buildCatFilter();}
+    else notify(lang==='en'?'Check format':'格式有误');
+    e.target.value='';
+  };
+  r.readAsText(f,'utf-8');
+}
+
+// ─── THEME ────────────────────────────────────────────
+const TH={system:{},
+  light:{'--bg':'#f6f8ff','--bg2':'#fff','--bg3':'#eef0fa','--bd':'#dde0f5','--tx':'#131320','--tx2':'#5a5a90','--acc':'#3b5bdb','--acc2':'#748ffc'},
+  dark:{'--bg':'#0d0e1a','--bg2':'#141525','--bg3':'#1c1e30','--bd':'#2a2d48','--tx':'#e8eaff','--tx2':'#8890c0','--acc':'#748ffc','--acc2':'#91a7ff'},
+  blue:{'--bg':'#e8f4fd','--bg2':'#fff','--bg3':'#d0e8f8','--bd':'#a8d0f0','--tx':'#0a2540','--tx2':'#3060a0','--acc':'#1971c2','--acc2':'#339af0'},
+  purple:{'--bg':'#100d1f','--bg2':'#1a1530','--bg3':'#221c3a','--bd':'#3a3060','--tx':'#ede8ff','--tx2':'#9080c0','--acc':'#a78bfa','--acc2':'#c4b5fd'}
+};
+function setTheme(t){curTheme=t;localStorage.setItem('vocabTheme',t);const r=document.documentElement;Object.keys(TH.dark).forEach(k=>r.style.removeProperty(k));if(t!=='system')Object.entries(TH[t]).forEach(([k,v])=>r.style.setProperty(k,v));renderThemeBtns();notify(lang==='en'?'Theme updated':'主题已切换');}
+function renderThemeBtns(){['system','light','dark','blue','purple'].forEach(t=>{const b=document.getElementById('th-'+t);if(b)b.className='thbtn'+(curTheme===t?' on':'');});}
+function clearMastered(){cw().forEach(w=>w.mastered=false);save();rw();notify(lang==='en'?'Cleared':'已清除');}
+function clearAll(){if(confirm(lang==='en'?'Clear all words?':'清空全部单词？')){W[lang]=[];save();rw();buildCatFilter();notify(lang==='en'?'Cleared':'已清空');}}
+
+// ─── TAB ─────────────────────────────────────────────
+function sw(tab){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const tabEl=document.getElementById('tab-'+tab);
+  if(tabEl){tabEl.classList.add('active');tabEl.classList.add('sec-fade');}
+  const map={home:0,words:1,add:2,quiz:3,map:4,more:5};
+  const idx=map[tab]; if(idx!==undefined)document.querySelectorAll('.tab')[idx].classList.add('active');
+  if(tab==='home')renderHome();
+  if(tab==='words'){buildCatFilter();rw();}
+  if(tab==='add'){renderAddForm();const oc=document.getElementById('ocrCard');if(oc)oc.style.display=lang==='jp'?'block':'none';}
+  if(tab==='quiz'){renderHist();updateQuizPool();}
+  if(tab==='map')initMap();
+  if(tab==='more')renderThemeBtns();
+}
+
+// ─── DAILY JLPT WORDS ─────────────────────────────────
+const JLPT_DB=[
+  {word:'把握',kana:'はあく',defs:[{meaning:'掌握',ex:''}],level:'N1',cat:'名词'},{word:'促す',kana:'うながす',defs:[{meaning:'促使',ex:''}],level:'N1',cat:'动词'},
+  {word:'妨げる',kana:'さまたげる',defs:[{meaning:'妨碍',ex:''}],level:'N1',cat:'动词'},{word:'踏まえる',kana:'ふまえる',defs:[{meaning:'基于',ex:''}],level:'N1',cat:'动词'},
+  {word:'捉える',kana:'とらえる',defs:[{meaning:'抓住/理解',ex:''}],level:'N1',cat:'动词'},{word:'見直す',kana:'みなおす',defs:[{meaning:'重新审视',ex:''}],level:'N1',cat:'动词'},
+  {word:'取り組む',kana:'とりくむ',defs:[{meaning:'致力于',ex:''}],level:'N1',cat:'动词'},{word:'及ぼす',kana:'およぼす',defs:[{meaning:'产生影响',ex:''}],level:'N1',cat:'动词'},
+  {word:'概念',kana:'がいねん',defs:[{meaning:'概念',ex:''}],level:'N1',cat:'名词'},{word:'矛盾',kana:'むじゅん',defs:[{meaning:'矛盾',ex:''}],level:'N1',cat:'名词'},
+  {word:'曖昧',kana:'あいまい',defs:[{meaning:'模糊/暧昧',ex:''}],level:'N1',cat:'形容词'},{word:'露骨',kana:'ろこつ',defs:[{meaning:'露骨/直白',ex:''}],level:'N1',cat:'形容词'},
+  {word:'示す',kana:'しめす',defs:[{meaning:'表示/显示',ex:''}],level:'N2',cat:'动词'},{word:'影響',kana:'えいきょう',defs:[{meaning:'影响',ex:''}],level:'N2',cat:'名词'},
+  {word:'判断',kana:'はんだん',defs:[{meaning:'判断',ex:''}],level:'N2',cat:'名词'},{word:'解決',kana:'かいけつ',defs:[{meaning:'解决',ex:''}],level:'N2',cat:'名词'},
+  {word:'認める',kana:'みとめる',defs:[{meaning:'承认',ex:''}],level:'N2',cat:'动词'},{word:'断る',kana:'ことわる',defs:[{meaning:'拒绝',ex:''}],level:'N2',cat:'动词'},
+  {word:'諦める',kana:'あきらめる',defs:[{meaning:'放弃',ex:''}],level:'N2',cat:'动词'},{word:'乗り越える',kana:'のりこえる',defs:[{meaning:'克服',ex:''}],level:'N2',cat:'动词'},
+  {word:'調査',kana:'ちょうさ',defs:[{meaning:'调查',ex:''}],level:'N2',cat:'名词'},{word:'提案',kana:'ていあん',defs:[{meaning:'提案',ex:''}],level:'N2',cat:'名词'},
+  {word:'複雑',kana:'ふくざつ',defs:[{meaning:'复杂',ex:''}],level:'N2',cat:'形容词'},{word:'丁寧',kana:'ていねい',defs:[{meaning:'礼貌/仔细',ex:''}],level:'N2',cat:'形容词'},
+  {word:'増える',kana:'ふえる',defs:[{meaning:'增加',ex:''}],level:'N3',cat:'动词'},{word:'減る',kana:'へる',defs:[{meaning:'减少',ex:''}],level:'N3',cat:'动词'},
+  {word:'変わる',kana:'かわる',defs:[{meaning:'改变',ex:''}],level:'N3',cat:'动词'},{word:'続く',kana:'つづく',defs:[{meaning:'持续',ex:''}],level:'N3',cat:'动词'},
+  {word:'集まる',kana:'あつまる',defs:[{meaning:'聚集',ex:''}],level:'N3',cat:'动词'},{word:'伝える',kana:'つたえる',defs:[{meaning:'传达',ex:''}],level:'N3',cat:'动词'},
+  {word:'気づく',kana:'きづく',defs:[{meaning:'注意到',ex:''}],level:'N3',cat:'动词'},{word:'感じる',kana:'かんじる',defs:[{meaning:'感觉',ex:''}],level:'N3',cat:'动词'},
+  {word:'思い出す',kana:'おもいだす',defs:[{meaning:'想起',ex:''}],level:'N3',cat:'动词'},{word:'心配',kana:'しんぱい',defs:[{meaning:'担心',ex:''}],level:'N3',cat:'名词'},
+  {word:'経験',kana:'けいけん',defs:[{meaning:'经验',ex:''}],level:'N3',cat:'名词'},{word:'関係',kana:'かんけい',defs:[{meaning:'关系',ex:''}],level:'N3',cat:'名词'},
+  {word:'普通',kana:'ふつう',defs:[{meaning:'普通',ex:''}],level:'N3',cat:'形容词'},{word:'必要',kana:'ひつよう',defs:[{meaning:'必要',ex:''}],level:'N3',cat:'形容词'},
+  {word:'働く',kana:'はたらく',defs:[{meaning:'工作',ex:''}],level:'N4',cat:'动词'},{word:'起きる',kana:'おきる',defs:[{meaning:'起床/发生',ex:''}],level:'N4',cat:'动词'},
+  {word:'開ける',kana:'あける',defs:[{meaning:'打开',ex:''}],level:'N4',cat:'动词'},{word:'閉める',kana:'しめる',defs:[{meaning:'关闭',ex:''}],level:'N4',cat:'动词'},
+  {word:'座る',kana:'すわる',defs:[{meaning:'坐',ex:''}],level:'N4',cat:'动词'},{word:'走る',kana:'はしる',defs:[{meaning:'跑',ex:''}],level:'N4',cat:'动词'},
+  {word:'泳ぐ',kana:'およぐ',defs:[{meaning:'游泳',ex:''}],level:'N4',cat:'动词'},{word:'待つ',kana:'まつ',defs:[{meaning:'等待',ex:''}],level:'N4',cat:'动词'},
+  {word:'教える',kana:'おしえる',defs:[{meaning:'教/告诉',ex:''}],level:'N4',cat:'动词'},{word:'覚える',kana:'おぼえる',defs:[{meaning:'记住',ex:''}],level:'N4',cat:'动词'},
+  {word:'忘れる',kana:'わすれる',defs:[{meaning:'忘记',ex:''}],level:'N4',cat:'动词'},{word:'練習',kana:'れんしゅう',defs:[{meaning:'练习',ex:''}],level:'N4',cat:'名词'},
+  {word:'準備',kana:'じゅんび',defs:[{meaning:'准备',ex:''}],level:'N4',cat:'名词'},{word:'理由',kana:'りゆう',defs:[{meaning:'理由',ex:''}],level:'N4',cat:'名词'},
+  {word:'場合',kana:'ばあい',defs:[{meaning:'情况/场合',ex:''}],level:'N4',cat:'名词'},{word:'大切',kana:'たいせつ',defs:[{meaning:'重要',ex:''}],level:'N4',cat:'形容词'},
+  {word:'便利',kana:'べんり',defs:[{meaning:'方便',ex:''}],level:'N4',cat:'形容词'},{word:'有名',kana:'ゆうめい',defs:[{meaning:'著名',ex:''}],level:'N4',cat:'形容词'},
+  {word:'親切',kana:'しんせつ',defs:[{meaning:'亲切',ex:''}],level:'N4',cat:'形容词'}
+];
+function getDailyWords(){
+  const seed=new Date().toDateString();let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;
+  const res=[];const seen=new Set();
+  for(let i=0;res.length<10&&i<500;i++){const idx=(h+i*37)%JLPT_DB.length;if(!seen.has(idx)){seen.add(idx);res.push(JLPT_DB[idx]);}}
+  return res;
+}
+function renderDailyWords(){
+  const el=document.getElementById('dailyWords');if(!el)return;
+  const words=getDailyWords();
+  el.innerHTML=words.map((w,i)=>{
+    const lc=w.level==='N1'?'t-n1':w.level==='N2'?'t-n2':w.level==='N3'?'t-n3':'t-n4';
+    const already=cw().some(x=>x.word===w.word);
+    return `<div class="dword">
+      <div class="dword-main">
+        <div style="display:flex;align-items:baseline;gap:5px">
+          <span style="font-size:16px;font-weight:500">${w.word}</span>
+          <span style="font-size:11px;cursor:pointer;color:var(--acc2)" onclick="speak('${w.kana}','ja-JP')">🔊</span>
+          <span class="tag ${lc}">${w.level}</span>
+        </div>
+        <div style="font-size:11px;color:var(--tx2)">${w.kana} · ${w.defs[0].meaning}</div>
+      </div>
+      ${already?'<span style="font-size:10px;color:var(--suc)">已收录</span>':`<button class="bp" style="padding:3px 9px;font-size:11px" onclick="addDailyWord(${i})">+ 添加</button>`}
+    </div>`;
+  }).join('');
+}
+function addDailyWord(i){
+  const w=getDailyWords()[i];const today=new Date().toDateString();
+  if(cw().some(x=>x.word===w.word)){notify('已存在该单词');return;}
+  cw().unshift({...w,root:'',rel:'',forms:{},pron:'',mastered:false,addedDate:today,srsBox:0,nextReview:today,wrongCount:0});
+  save();autoSupplement(cw()[0]);
+  const sk=lang+'Streak';const sd=JSON.parse(localStorage.getItem(sk)||'[]');
+  if(!sd.includes(today)){sd.push(today);localStorage.setItem(sk,JSON.stringify(sd));}
+  renderDailyWords();renderHome();buildCatFilter();notify('✅ 已添加：'+w.word);
+}
+
+// ─── AUTO SUPPLEMENT ──────────────────────────────────
+function autoSupplement(w){
+  if(w.rel)return;
+  const chars=[...new Set((w.word||'').split('').filter(c=>/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]/.test(c)))];
+  const related=cw().filter(x=>x!==w&&x.word!==w.word&&chars.some(c=>x.word&&x.word.includes(c))).slice(0,4).map(x=>x.word);
+  if(related.length){w.rel=related.join(',');save();notify('💡 自动补充联想词：'+w.rel,3000);}
+}
+
+// ─── OCR ──────────────────────────────────────────────
+let _tessLoaded=false;
+function loadTess(cb){
+  if(window.Tesseract){cb();return;}
+  if(_tessLoaded){const t=setInterval(()=>{if(window.Tesseract){clearInterval(t);cb();}},200);return;}
+  _tessLoaded=true;
+  const s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+  s.onload=cb;document.head.appendChild(s);
+}
+function ocrDrop(e){
+  e.preventDefault();document.getElementById('ocrZone').classList.remove('dragover');
+  const f=e.dataTransfer.files[0];if(f)processOCR(f);
+}
+function ocrFile(e){const f=e.target.files[0];if(f)processOCR(f);e.target.value='';}
+function processOCR(file){
+  notify('🔍 正在识别图片…',8000);
+  document.getElementById('ocrResult').style.display='none';
+  document.getElementById('ocrZone').innerHTML='<div style="font-size:13px;color:var(--acc2)">⏳ 识别中…</div>';
+  const url=URL.createObjectURL(file);
+  loadTess(()=>{
+    Tesseract.recognize(url,['jpn','chi_sim'],{logger:m=>{if(m.status==='recognizing text')document.getElementById('ocrZone').innerHTML=`<div style="font-size:12px;color:var(--acc2)">识别中 ${Math.round(m.progress*100)}%…</div>`;}})
+    .then(({data:{text}})=>{
+      URL.revokeObjectURL(url);
+      document.getElementById('ocrZone').innerHTML='<div style="font-size:22px;margin-bottom:4px">📷</div><div style="font-size:12px;color:var(--tx2)">点击上传图片 / 拖拽截图到此处</div>';
+      showOCRWords(text);
+    }).catch(()=>{
+      URL.revokeObjectURL(url);
+      document.getElementById('ocrZone').innerHTML='<div style="font-size:22px;margin-bottom:4px">📷</div><div style="font-size:12px;color:var(--tx2)">点击上传图片 / 拖拽截图到此处</div>';
+      notify('识别失败，请重试');
+    });
+  });
+}
+function showOCRWords(text){
+  const matches=[...new Set((text.match(/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]{2,}/g)||[]))].slice(0,15);
+  const el=document.getElementById('ocrWords');
+  if(!matches.length){el.innerHTML='<div style="font-size:12px;color:var(--tx2)">未识别到日语词汇</div>';document.getElementById('ocrResult').style.display='block';return;}
+  el.innerHTML=matches.map(w=>`<button class="chip" style="margin:2px" onclick="fillOCRWord('${w.replace(/'/g,"\\'")}');this.classList.add('on')">${w}</button>`).join('');
+  document.getElementById('ocrStatus').textContent='点击词汇填入添加表单';
+  document.getElementById('ocrResult').style.display='block';
+  notify('✅ 识别完成，发现 '+matches.length+' 个词汇');
+}
+function fillOCRWord(word){
+  const isKana=/^[\u3040-\u309f\u30a0-\u30ff]+$/.test(word);
+  sw('add');
+  setTimeout(()=>{
+    if(isKana){const k=document.getElementById('f-kana');if(k)k.value=word;}
+    else{const w=document.getElementById('f-word');if(w)w.value=word;}
+    notify('已填入：'+word);
+  },100);
+}
+
+// ─── SEED DATA ────────────────────────────────────────
+function seedEN(){
+  const t=new Date().toDateString();
+  [{word:'serendipity',pron:'/ˌsɛr.ənˈdɪp.ɪ.ti/',defs:[{meaning:'意外发现美好事物的能力',ex:'Finding that café was pure serendipity.'}],root:'Persian: Serendip',rel:'coincidence, luck',level:'C1',cat:'Literature'},
+   {word:'ubiquitous',pron:'/juːˈbɪk.wɪ.təs/',defs:[{meaning:'无处不在的',ex:'Smartphones have become ubiquitous.'}],root:'Latin: ubique',rel:'pervasive, omnipresent',level:'B2',cat:'Academic'},
+   {word:'resilient',pron:'/rɪˈzɪl.i.ənt/',defs:[{meaning:'有韧性的',ex:'Children are remarkably resilient.'},{meaning:'能迅速恢复的',ex:'The economy proved resilient.'}],root:'Latin: resilire',rel:'tough, adaptable',level:'B2',cat:'Academic'}
+  ].forEach(w=>W.en.push({...w,mastered:false,addedDate:t,srsBox:0,nextReview:t,wrongCount:0}));
+}
+function seedJP(){
+  const t=new Date().toDateString();
+  [{word:'食べる',kana:'たべる',defs:[{meaning:'吃',ex:'毎日ご飯を食べる。'},{meaning:'(俚语) 打败/赢得',ex:'相手を食べた。'}],root:'',rel:'飲む,料理',level:'N4',cat:'动词',forms:{masu:'食べます',te:'食べて',ta:'食べた',nai:'食べない',meirei:'食べろ',ishi:'食べよう',ba:'食べれば',kano:'食べられる',ukemi:'食べられる',shieki:'食べさせる',shiekiukemi:'食べさせられる',kinshi:'食べるな'}},
+   {word:'勉強',kana:'べんきょう',defs:[{meaning:'学习',ex:'日本語を勉強している。'},{meaning:'降价优惠',ex:'もっと勉強してください。'}],root:'',rel:'テスト,学校',level:'N5',cat:'名词'},
+   {word:'難しい',kana:'むずかしい',defs:[{meaning:'难，困难',ex:'この問題は難しい。'}],root:'',rel:'簡単,複雑',level:'N4',cat:'形容词'}
+  ].forEach(w=>W.jp.push({...w,pron:'',mastered:false,addedDate:t,srsBox:0,nextReview:t,wrongCount:0}));
+}
+
+// ─── INIT ─────────────────────────────────────────────
+setTheme(curTheme);
+T();
+renderAddForm();
+if(!W.en.length) seedEN();
+if(!W.jp.length) seedJP();
+save();
+document.getElementById('goalN').value=localStorage.getItem(lang+'Goal')||5;
+renderHome();
+buildCatFilter();
+</script>
+</body></html>
