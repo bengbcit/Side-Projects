@@ -19,3 +19,14 @@ Focused on **Cross-platform development** and rapid prototyping.
 1.  Optimize current Web applications.
 2.  Deploy to Mobile platforms (iOS/Android).
 3.  Develop interactive WeChat or Line Mini Programs.
+
+### 🤖 Bot Configuration / How to Run
+### 1. Environment Setup
+This project uses environment variables to manage sensitive information. 
+- Create a `.env` file in the root directory.
+- Add your credentials to the `.env` file (this file is ignored by Git for security).
+
+### 2. Required Keys in `.env`:
+```env
+DISCORD_TOKEN=your_discord_bot_token_here
+ANTHROPIC_API_KEY=your_claude_api_key_here
